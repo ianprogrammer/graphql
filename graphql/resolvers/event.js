@@ -41,10 +41,10 @@ module.exports = {
                 description: args.eventInput.description,
                 price: +args.eventInput.price,
                 date: new Date(args.eventInput.date),
-                creator: '5e00f3d50a281d4184b108b7'
+                creator: '5e014ccacb4ef131294815eb'
             })
             const createdEvents = await event.save()
-            const findedUser = await User.findById('5e00f3d50a281d4184b108b7')
+            const findedUser = await User.findById('5e014ccacb4ef131294815eb')
 
             if (!findedUser)
                 throw new Error('User not found')

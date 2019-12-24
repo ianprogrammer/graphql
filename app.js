@@ -6,12 +6,13 @@ const mongoose = require('mongoose')
 const graphQLSchema = require('./graphql/schema/index')
 const graphQLEventResolvers = require('./graphql/resolvers/event')
 const graphQLUserResolvers = require('./graphql/resolvers/user')
+const graphQLBookingResolvers = require('./graphql/resolvers/booking')
 
 
 app.use(bodyParser.json());
 app.use('/graphql', graphQLHttp({
     schema: graphQLSchema,
-    rootValue: {...graphQLEventResolvers,...graphQLUserResolvers},
+    rootValue: {...graphQLEventResolvers,...graphQLUserResolvers, ... graphQLBookingResolvers},
     graphiql: true
 
 }))
