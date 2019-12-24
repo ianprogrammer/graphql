@@ -19,7 +19,7 @@ app.use('/graphql', graphQLHttp({
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${
     process.env.MONGO_PASSWORD
-    }@cluster0-g7qoz.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`
+    }@cluster0-g7qoz.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,{ useUnifiedTopology: true,useNewUrlParser: true },
 ).then(() => {
     app.listen(3000)
 }).catch(err => {

@@ -1,14 +1,19 @@
 const Booking = require('../../models/booking')
 const Event = require('../../models/event')
+const Util = require('./util')
+
+
 
 module.exports = {
     bookings: async () => {
         try {
             const bookings = await Booking.find()
-
             return bookings.map(book => {
+
                 return {
                     ...book._doc,
+                    user: Util.user.bind(this, book._doc.user),
+                    event: Util.singleEvent.bind(this, book._doc.event),
                     createdAt: new Date(book._doc.createdAt).toISOString(),
                     updatedAt: new Date(book._doc.updatedAt).toISOString()
                 }
@@ -32,7 +37,20 @@ module.exports = {
             updatedAt: new Date(result._doc.updatedAt).toISOString()
         }
     },
-    cancelBooking: (args) => {
-
+    cancelBooking: async args => {
+        try {
+            const booking =
+                await Booking.findById({ _id: args.bookingId })
+                    .populate('event')
+          
+            const event = {
+                ...booking.event._doc,
+                creator: Util.user.bind(this, booking.event._doc.creator)
+            }
+            await Booking.deleteOne({ _id: args.bookingId })
+            return event
+        } catch (error) {
+            throw error
+        }
     }
 }
