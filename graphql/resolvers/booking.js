@@ -5,8 +5,13 @@ const Util = require('./util')
 
 
 module.exports = {
-    bookings: async () => {
+    bookings: async (args, req) => {
         try {
+
+            if (!req.isAuth) {
+                throw new Error("Unauthenticated")
+            }
+
             const bookings = await Booking.find()
             return bookings.map(book => {
 
@@ -22,27 +27,36 @@ module.exports = {
             throw error
         }
     },
-    bookEvent: async (args) => {
+    bookEvent: async (args, req) => {
+
+
+        if (!req.isAuth) {
+            throw new Error("Unauthenticated")
+        }
+
         const fetchedevent = await Event.findOne({ _id: args.eventId })
         const booking = new Booking({
             user: '5e014ccacb4ef131294815eb',
             event: fetchedevent
         })
-
         const result = await booking.save()
-
         return {
             ...result._doc,
             createdAt: new Date(result._doc.createdAt).toISOString(),
             updatedAt: new Date(result._doc.updatedAt).toISOString()
         }
     },
-    cancelBooking: async args => {
+    cancelBooking: async (args, req) => {
         try {
+
+            if (!req.isAuth) {
+                throw new Error("Unauthenticated")
+            }
+
             const booking =
                 await Booking.findById({ _id: args.bookingId })
                     .populate('event')
-          
+
             const event = {
                 ...booking.event._doc,
                 creator: Util.user.bind(this, booking.event._doc.creator)

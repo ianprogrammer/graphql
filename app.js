@@ -7,9 +7,11 @@ const graphQLSchema = require('./graphql/schema/index')
 const graphQLEventResolvers = require('./graphql/resolvers/event')
 const graphQLUserResolvers = require('./graphql/resolvers/user')
 const graphQLBookingResolvers = require('./graphql/resolvers/booking')
-
+const isAuth = require('./middleware/is-auth')
 
 app.use(bodyParser.json());
+app.use(isAuth)
+
 app.use('/graphql', graphQLHttp({
     schema: graphQLSchema,
     rootValue: {...graphQLEventResolvers,...graphQLUserResolvers, ... graphQLBookingResolvers},
